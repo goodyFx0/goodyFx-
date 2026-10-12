@@ -1,97 +1,100 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GoodyFx AI Gold Signal</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1220">
+<title>goodyFx AI Gold Signal</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#090b10;color:#f4f4f4;font-family:Arial,sans-serif}
-header{background:#12151d;padding:22px 16px;border-bottom:2px solid #d8ad42}
-h1{color:#f4c64e;font-size:25px;margin:0 0 8px}
-.sub{color:#aaa;font-size:13px}
-main{max-width:600px;margin:auto;padding:16px}
-.card{background:#151923;border:1px solid #333845;border-radius:15px;padding:18px;margin-bottom:15px}
-.label{color:#aaa;font-size:12px;text-transform:uppercase;letter-spacing:1px}
-.price{font-size:29px;color:#f4c64e;font-weight:bold;margin:12px 0}
-.signal{font-size:28px;font-weight:bold;color:#f4c64e;margin:12px 0}
-button{background:#e9b83f;color:#151515;font-weight:bold;border:0;padding:13px;border-radius:9px;width:100%;font-size:15px}
-input{width:100%;padding:12px;margin:8px 0 15px;background:#090b10;border:1px solid #444;color:white;border-radius:8px}
-.row{display:flex;gap:10px}
-.row>div{flex:1;background:#0c0f16;padding:12px;border-radius:9px}
-.value{font-weight:bold;margin-top:8px;overflow-wrap:anywhere}
-.notice{font-size:13px;line-height:1.6;color:#c7c7c7}
-footer{text-align:center;color:#777;font-size:12px;padding:20px}
-.green{color:#55dc91}.red{color:#ff7070}
+:root{--bg:#0b1220;--panel:#121c2e;--line:#27364d;--text:#edf3ff;--muted:#a9b8cf;--gold:#f4c44e;--green:#29c58a;--red:#ff6878}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px Arial,sans-serif}
+header{padding:22px 16px 16px;background:#101a2b;border-bottom:1px solid var(--line)}
+h1{font-size:23px;margin:0 0 7px}h1 span{color:var(--gold)}.sub{color:var(--muted);font-size:13px}
+main{max-width:1000px;margin:auto;padding:14px;display:grid;gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px;min-width:0}
+.card h2{font-size:16px;margin:0 0 12px}.price{font-size:25px;font-weight:700;color:var(--gold)}.muted,.note{color:var(--muted);font-size:12px;line-height:1.5}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.grow{flex:1;min-width:130px}
+label{display:block;color:var(--muted);font-size:12px;margin:10px 0 5px}
+select,input,button{font:inherit;border-radius:9px;border:1px solid var(--line);padding:11px;background:#0c1525;color:var(--text);width:100%}
+button{background:var(--gold);color:#171717;border:0;font-weight:700;cursor:pointer;margin-top:12px}
+button.secondary{background:#263750;color:var(--text)}
+.signal{font-size:25px;font-weight:800;letter-spacing:1px}.wait{color:var(--gold)}
+.chart{height:430px;overflow:hidden;border-radius:10px;background:#0c1525}.chart iframe{width:100%;height:100%;border:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.badge{display:inline-block;padding:5px 8px;border-radius:7px;background:#263750;color:var(--muted);font-size:12px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:620px){.grid2{grid-template-columns:1fr}.chart{height:360px}h1{font-size:21px}}
 </style>
 </head>
 <body>
 <header>
-<h1>🟡 GoodyFx AI Gold Signal</h1>
-<div class="sub">XAUUSD · M30 · MT5 Trading Assistant</div>
+  <h1>🟡 <span>goodyFx</span> AI Gold Signal</h1>
+  <div class="sub">XAUUSD • MT5 trading companion • Analysis is informational, not a guarantee</div>
 </header>
-
 <main>
-<div class="card">
-<div class="label">Gold Market</div>
-<div class="price" id="price">Unavailable</div>
-<div class="sub">Live market connection not configured</div>
-</div>
-
-<div class="card">
-<div class="label">Current Signal</div>
-<div class="signal" id="signal">WAIT</div>
-<div class="notice" id="reason">Live gold prices and verified M30 candles are required before a trading signal can be calculated.</div>
-<br>
-<button onclick="refresh()">CHECK MARKET STATUS</button>
-<div class="sub" id="updated" style="margin-top:12px">No live data received</div>
-</div>
-
-<div class="card">
-<div class="label">Risk Calculator</div>
-<p class="notice">Enter your account balance and the percentage you are willing to risk.</p>
-<label>Account balance ($)</label>
-<input id="balance" type="number" placeholder="e.g. 100" min="0">
-<label>Risk (%)</label>
-<input id="risk" type="number" value="1" min="0" max="100" step="0.1">
-<button onclick="calculate()">CALCULATE RISK</button>
-<div class="price" id="riskresult">$1.00</div>
-<div class="notice">Maximum planned loss based on your inputs. This is not a lot-size recommendation.</div>
-</div>
-
-<div class="card">
-<div class="label">Signal Rules</div>
-<p class="notice">Timeframe: M30<br>
-Market: XAUUSD<br>
-Trend indicators: EMA 50 / EMA 200<br>
-Momentum: RSI and MACD<br>
-Risk tool: Account risk calculator</p>
-</div>
-
-<div class="card">
-<div class="label">Important Notice</div>
-<p class="notice">This is an early version. It does not yet receive live gold prices or calculate verified BUY/SELL signals. WAIT means no verified trading signal is available. Do not use this page alone to place trades. Gold trading involves substantial risk.</p>
-</div>
+  <section class="card">
+    <div class="row">
+      <div class="grow"><h2>Gold market chart</h2><div class="muted">TradingView chart for OANDA:XAUUSD. Quotes and availability depend on the chart provider and may differ from your MT5 broker.</div></div>
+      <div class="grow"><label for="timeframe">MT5 timeframe</label>
+      <select id="timeframe">
+        <option value="1">M1 — 1 minute</option><option value="2">M2 — 2 minutes</option><option value="3">M3 — 3 minutes</option><option value="4">M4 — 4 minutes</option><option value="5">M5 — 5 minutes</option><option value="6">M6 — 6 minutes</option><option value="10">M10 — 10 minutes</option><option value="12">M12 — 12 minutes</option><option value="15">M15 — 15 minutes</option><option value="20">M20 — 20 minutes</option><option value="30" selected>M30 — 30 minutes</option><option value="60">H1 — 1 hour</option><option value="120">H2 — 2 hours</option><option value="180">H3 — 3 hours</option><option value="240">H4 — 4 hours</option><option value="360">H6 — 6 hours</option><option value="480">H8 — 8 hours</option><option value="720">H12 — 12 hours</option><option value="D">D1 — 1 day</option><option value="W">W1 — 1 week</option><option value="M">MN1 — 1 month</option>
+      </select></div>
+    </div>
+    <div class="chart" id="chart" style="margin-top:12px"></div>
+    <div class="note" style="margin-top:10px">If the chart does not load inside this page, open the site in a browser that allows embedded TradingView charts.</div>
+  </section>
+  <div class="grid2">
+    <section class="card">
+      <h2>Current signal status</h2>
+      <div class="signal wait" id="signal">WAIT</div>
+      <p class="muted" id="signalReason">No verified broker candle feed is connected. Do not treat this status as a live BUY or SELL recommendation.</p>
+      <span class="badge" id="tfBadge">Selected timeframe: M30</span>
+      <p class="note">This version does not calculate signals from the chart. To enable real indicator-based analysis, a trusted candle-data source or MT5-connected backend must be configured.</p>
+    </section>
+    <section class="card">
+      <h2>Risk calculator</h2>
+      <p class="muted">Estimates the money you are willing to risk. It does not calculate lot size because contract specifications and stop distance vary by broker.</p>
+      <label for="balance">Account balance (account currency)</label><input id="balance" type="number" min="0" step="any" placeholder="e.g. 100">
+      <label for="risk">Risk per trade (%)</label><input id="risk" type="number" min="0" max="100" step="0.1" value="1">
+      <button id="calc">CALCULATE RISK</button>
+      <div class="price" id="riskResult" style="margin-top:12px">$0.00</div>
+      <div class="muted">Maximum planned loss based on your inputs; not a lot-size recommendation.</div>
+    </section>
+  </div>
+  <section class="card">
+    <h2>Analysis checklist</h2>
+    <div class="row"><span class="badge">Trend: EMA 50 / EMA 200</span><span class="badge">Momentum: RSI</span><span class="badge">Confirmation: MACD</span><span class="badge">Market: XAUUSD</span></div>
+    <p class="note">Indicators are a checklist only in this prototype; no indicator values are being fetched or calculated yet. Confirm any setup against your MT5 broker's candles, spread, and execution conditions before trading.</p>
+  </section>
+  <section class="card">
+    <h2>Important risk notice</h2>
+    <p class="note">Gold trading is high risk. This app cannot guarantee accurate signals or profits. Test with a demo account first. Never risk money you cannot afford to lose, and never enter a trade solely because an app says BUY or SELL.</p>
+  </section>
 </main>
-<footer>GoodyFx AI Gold Signal · Built for mobile</footer>
-
+<footer>goodyFx AI Gold Signal • Mobile-friendly prototype</footer>
 <script>
-function refresh(){
- document.getElementById('price').textContent='Unavailable';
- document.getElementById('signal').textContent='WAIT';
- document.getElementById('reason').textContent='No verified live XAUUSD feed is connected. No BUY or SELL recommendation will be invented.';
- document.getElementById('updated').textContent='Checked: '+new Date().toLocaleString();
+const names={"1":"M1","2":"M2","3":"M3","4":"M4","5":"M5","6":"M6","10":"M10","12":"M12","15":"M15","20":"M20","30":"M30","60":"H1","120":"H2","180":"H3","240":"H4","360":"H6","480":"H8","720":"H12","D":"D1","W":"W1","M":"MN1"};
+function loadChart(){
+ const tf=document.getElementById('timeframe').value;
+ document.getElementById('tfBadge').textContent='Selected timeframe: '+names[tf];
+ const box=document.getElementById('chart');
+ box.innerHTML='';
+ const frame=document.createElement('iframe');
+ frame.title='XAUUSD gold chart';
+ frame.loading='lazy';
+ frame.src='https://s.tradingview.com/widgetembed/?frameElementId=tv_chart&symbol=OANDA%3AXAUUSD&interval='+encodeURIComponent(tf)+'&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=%230c1525&studies=%5B%5D&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&hideideas=1&locale=en';
+ frame.allowFullscreen=true;
+ box.appendChild(frame);
 }
-function calculate(){
- const b=Number(document.getElementById('balance').value);
- const r=Number(document.getElementById('risk').value);
- const out=document.getElementById('riskresult');
- if(!Number.isFinite(b)||!Number.isFinite(r)||b<=0||r<=0||r>100){
-  out.textContent='Enter valid values';return;
- }
- out.textContent='$'+(b*r/100).toFixed(2);
-}
-refresh();
+document.getElementById('timeframe').addEventListener('change',loadChart);
+document.getElementById('calc').addEventListener('click',()=>{
+ const balance=Number(document.getElementById('balance').value);
+ const risk=Number(document.getElementById('risk').value);
+ const out=document.getElementById('riskResult');
+ if(!Number.isFinite(balance)||balance<=0||!Number.isFinite(risk)||risk<0||risk>100){out.textContent='Check your inputs';return;}
+ out.textContent=(balance*risk/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})+' (account currency)';
+});
+loadChart();
 </script>
 </body>
 </html>
